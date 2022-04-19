@@ -8,13 +8,17 @@ import styles from "../styles/Home.module.css";
 const Home: NextPage = () => {
   const route = useRouter();
   const handelGotoPostDetails = () => {
-    route.push({
-      pathname: "/posts/[id]",
-      query: {
-        id: 123,
-      }
-    })
-  }
+    route.push(
+      {
+        pathname: "/posts/[id]",
+        query: {
+          id: 123,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -34,7 +38,7 @@ const Home: NextPage = () => {
         </p>
 
         <Link href="/about">
-          <a>Go to about</a>   
+          <a>Go to about</a>
         </Link>
 
         <button onClick={handelGotoPostDetails}>Go to post details</button>
