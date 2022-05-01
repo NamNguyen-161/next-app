@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import * as React from "react";
 import Header from "../components/common/header";
+import { MainLayout } from "../components/layout";
 
 export interface AboutProps {}
 
@@ -55,8 +56,8 @@ export default function AboutPage(props: AboutProps) {
       About Page
       <br />
       <ul>
-        {postList.map((post: any) => (
-          <li>{post.title}</li>
+        {postList.map((post: any, index) => (
+          <li key={index}>{post.title}</li>
         ))}
       </ul>
       <br />
@@ -64,6 +65,8 @@ export default function AboutPage(props: AboutProps) {
     </div>
   );
 }
+
+AboutPage.Layout = MainLayout;
 
 export async function getStaticProps() {
   console.log("getStaticProps");

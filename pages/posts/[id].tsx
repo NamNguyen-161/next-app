@@ -8,9 +8,15 @@ export interface PostDetailProps {
 
 export default function PostDetail({ post }: PostDetailProps) {
   const route = useRouter();
+
+  // when fallback in getStaticPaths = true
+  if (route.isFallback) {
+    return <div style={{ fontSize: "2rem", textAlign: "center" }}>Loading</div>;
+  }
   if (!post) {
     return null;
   }
+
   return (
     <div>
       <h1>Post details:</h1>
@@ -29,7 +35,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: data.data.map((post: any) => ({ params: { id: post.id } })),
-    fallback: false,
+    /**
+     * false: return error page when id include getStaticPaths
+     * true: render before page loading and wait getStaticProps build page. Then build done, re-render UI
+     * blocking: call getStaticProps fetch data
+     */
+    fallback: true,
   };
 };
 
@@ -48,5 +59,12 @@ export const getStaticProps: GetStaticProps<PostDetailProps> = async (
     props: {
       post: data,
     },
+    /**
+     * ISR: update page after 5s
+     * Keep stale page in 5s
+     * After 5s, first request send, it will render stale page and trigger action render new page and save cache.
+     * Next request, it will new page
+     */
+    revalidate: 5,
   };
 };
