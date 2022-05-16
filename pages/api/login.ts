@@ -35,12 +35,13 @@ export default function handler(
           cookies.set("access_token", accessToken, {
             httpOnly: true,
             sameSite: "lax",
-            expires: expiredAt,
+            expires: new Date(expiredAt),
           });
           (res as NextApiResponse)
             .status(200)
             .json({ message: "Login success" });
         } catch (error) {
+          console.log(error);
           (res as NextApiResponse)
             .status(500)
             .json({ message: "Something wrong" });

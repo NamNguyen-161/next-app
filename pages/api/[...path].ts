@@ -16,13 +16,12 @@ export default function handler(
   res: NextApiResponse<any>
 ) {
   return new Promise((resolve) => {
-    req.headers.cookie = "";
-
     const cookies = new Cookies(req, res);
     const access_token = cookies.get("access_token");
-
-    req.headers.authorization = `Bearer ${access_token}`;
-
+    if (access_token) {
+      req.headers.Authorization = `Bearer ${access_token}`;
+    }
+    req.headers.Cookie = "";
     proxy.web(req, res, {
       target: process.env.API_URL,
       changeOrigin: true,
